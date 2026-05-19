@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "Usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public abstract class Usuario {

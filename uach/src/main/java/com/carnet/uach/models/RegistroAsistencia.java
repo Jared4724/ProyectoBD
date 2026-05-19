@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "registro_asistencia")
+@Table(name = "RegistroAsistencia")
 @Data
 public class RegistroAsistencia {
 
@@ -28,6 +28,6 @@ public class RegistroAsistencia {
     @Column(name = "asistencia_confirmada", nullable = false)
     private boolean asistenciaConfirmada = false;
 
-    @Column(length = 255)
+    @Column(length = 500, nullable = false)
     private String evidencia;
 }

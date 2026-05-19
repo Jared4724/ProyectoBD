@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "eventos")
+@Table(name = "Eventos")
 @Data
 public class Evento {
 
@@ -17,7 +17,7 @@ public class Evento {
     @Column(name = "nombre_evento", nullable = false, length = 200)
     private String nombreEvento;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 1000)
     private String descripcion;
 
     @Column(nullable = false)

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "estudiantes")
+@Table(name = "Estudiante")
 @PrimaryKeyJoinColumn(name = "matricula")
 @Data
 @EqualsAndHashCode(callSuper = true)
