@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{layout :: head('Dashboard Empleado')}">
+    <title>Dashboard Empleado</title>
+</head>
+
+<body>
+
+    <!-- Insertamos el Header del layout -->
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="main-content">
+        <div class="card" style="max-width: 800px; text-align: center;">
+            <h2 style="color: var(--primary-color);">Bienvenido al Panel de Empleado</h2>
+            <p style="font-size: 1.2rem; margin-top: 1rem;">Hola, <span th:text="${usuarioNombre}">Empleado</span>.</p>
+            <p>Aquí podrás gestionar los eventos culturales, validaciones y reportes del sistema.</p>
+        </div>
+    </main>
+
+    <!-- Insertamos el Footer del layout -->
+    <footer th:replace="~{layout :: footer}"></footer>
+
+</body>
+
+</html>

@@ -118,7 +118,7 @@
     <header th:fragment="header" class="header">
         <h1>Carnet Cultural UACH</h1>
         <nav>
-            <!-- Aquí pueden ir enlaces de navegación en el futuro -->
+            <a th:if="${session.usuarioId != null}" th:href="@{/logout}" class="btn" style="background-color: #e53e3e; padding: 0.5rem 1rem;">Cerrar Sesión</a>
         </nav>
     </header>
 
