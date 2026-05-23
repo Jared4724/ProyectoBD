@@ -18,8 +18,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/login")
-    public String showLoginForm() {
+    @GetMapping({"/", "/login"})
+    public String showLoginForm(HttpSession session) {
+        if (session.getAttribute("usuarioId") != null) {
+            String rol = (String) session.getAttribute("rol");
+            if ("ESTUDIANTE".equals(rol)) return "redirect:/dashboard/estudiante";
+            if ("EMPLEADO".equals(rol)) return "redirect:/dashboard/empleado";
+        }
         return "login";
     }
 

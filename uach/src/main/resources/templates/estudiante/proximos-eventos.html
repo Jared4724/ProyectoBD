@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Próximos Eventos')}">
+    <title>Próximos Eventos</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <aside th:replace="~{layout :: sidebar-estudiante('proximos-eventos')}"></aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Próximos Eventos</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Cartelera de Actividades</h3>
+                                
+                                <div class="card-tools ml-auto">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control" name="filtroTipo" id="filtroTipo">
+                                            <option value="todos">Todos los eventos</option>
+                                            <option value="cultural">Culturales</option>
+                                            <option value="cientifico">Científicos</option>
+                                            <option value="deportivo">Deportivos</option>
+                                            <option value="comunidad">Apoyo a la comunidad</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha</th>
+                                            <th>Ubicación</th>
+                                            <th>Puntos</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Feria de Ciencias</td>
+                                            <td>Científico</td>
+                                            <td>25-May-2026</td>
+                                            <td>Facultad de Ingeniería</td>
+                                            <td>2</td>
+                                            <td><button class="btn btn-sm btn-primary">Inscribirme</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout :: footer}"></footer>
+</div>
+
+<div th:replace="~{layout :: scripts}"></div>
+</body>
+</html>

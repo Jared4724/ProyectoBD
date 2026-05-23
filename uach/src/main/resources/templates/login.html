@@ -1,45 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout :: head('Login')}">
     <title>Login</title>
 </head>
+<body class="hold-transition login-page" style="background-color: #f4f6f9;">
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary elevation-3" style="border-radius: 15px;">
+        <div class="card-header text-center pt-4">
+            <a th:href="@{/}" class="h1">
+                <img th:src="@{/dist/img/AdminLTELogo.png}" alt="Logo UACH" class="img-circle elevation-2" style="width: 80px; margin-bottom: 15px;"><br>
+                <b>Carnet</b>Cultural
+            </a>
+        </div>
+        <div class="card-body pb-4">
+            <p class="login-box-msg">Inicia sesión para comenzar</p>
 
-<body>
-
-    <!-- Insertamos el Header del layout -->
-    <header th:replace="~{layout :: header}"></header>
-
-    <main class="main-content">
-        <div class="card">
-            <h2 style="margin-top: 0; text-align: center; color: var(--primary-color); margin-bottom: 1.5rem;">Iniciar
-                Sesión</h2>
-
-            <div th:if="${error}"
-                style="background-color: #fee2e2; color: #b91c1c; padding: 0.75rem; border-radius: 6px; margin-bottom: 1.25rem; border: 1px solid #fca5a5; font-weight: 500; text-align: center;">
-                <p th:text="${error}" style="margin: 0;"></p>
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px;">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
 
             <form th:action="@{/login}" method="post">
-                <div class="form-group">
-                    <label for="correo">Usuario o Correo Electrónico</label>
-                    <input type="text" id="correo" name="correo" class="form-control" placeholder="" required autofocus>
+                <div class="input-group mb-3">
+                    <input type="text" id="correo" name="correo" class="form-control" placeholder="Usuario o Correo Electrónico" required autofocus style="border-radius: 10px 0 0 10px;">
+                    <div class="input-group-append">
+                        <div class="input-group-text" style="border-radius: 0 10px 10px 0;">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="contrasena">Contraseña</label>
-                    <input type="password" id="contrasena" name="contrasena" class="form-control" required
-                        placeholder="********">
+                <div class="input-group mb-3">
+                    <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña" required style="border-radius: 10px 0 0 10px;">
+                    <div class="input-group-append">
+                        <div class="input-group-text" style="border-radius: 0 10px 10px 0;">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn" style="margin-top: 1rem;">Ingresar</button>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block" style="border-radius: 10px; font-weight: bold;">Ingresar <i class="fas fa-sign-in-alt ml-2"></i></button>
+                    </div>
+                </div>
             </form>
+            
+            <div class="social-auth-links text-center mt-3 mb-3">
+                <p>- O -</p>
+                <a th:href="@{/}" class="btn btn-block btn-outline-secondary" style="border-radius: 10px;">
+                    <i class="fas fa-arrow-left mr-2"></i> Volver al inicio
+                </a>
+            </div>
+
         </div>
-    </main>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<!-- /.login-box -->
 
-    <!-- Insertamos el Footer del layout -->
-    <footer th:replace="~{layout :: footer}"></footer>
-
+<div th:replace="~{layout :: scripts}"></div>
 </body>
-
 </html>

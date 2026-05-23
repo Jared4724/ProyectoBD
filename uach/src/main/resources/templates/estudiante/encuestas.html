@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Encuestas Pendientes')}">
+    <title>Encuestas Pendientes</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <aside th:replace="~{layout :: sidebar-estudiante('encuestas')}"></aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Encuestas por Responder</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <style>
+                    .info-box.clickable { cursor: pointer; transition: transform 0.2s; }
+                    .info-box.clickable:hover { transform: scale(1.02); }
+                </style>
+                <p class="text-muted">Toca una categoría para ver las encuestas disponibles correspondientes a los eventos a los que asististe.</p>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="info-box bg-info clickable" onclick="mostrarEncuestas('culturales', 'A. Culturales')">
+                            <span class="info-box-icon"><i class="fas fa-theater-masks"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">A. Culturales</span>
+                                <span class="info-box-number">1 Pendiente</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="info-box bg-success clickable" onclick="mostrarEncuestas('cientificos', 'A. Científicos')">
+                            <span class="info-box-icon"><i class="fas fa-atom"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">A. Científicos</span>
+                                <span class="info-box-number">0 Pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="info-box bg-warning clickable" onclick="mostrarEncuestas('deportivos', 'A. Deportivos')">
+                            <span class="info-box-icon"><i class="fas fa-running"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" style="color: white;">A. Deportivos</span>
+                                <span class="info-box-number" style="color: white;">2 Pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="info-box bg-danger clickable" onclick="mostrarEncuestas('comunidad', 'Apoyo Comunidad')">
+                            <span class="info-box-icon"><i class="fas fa-hands-helping"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Apoyo Comunidad</span>
+                                <span class="info-box-number">0 Pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="panelListaEncuestas" style="display: none;">
+                    <div class="col-12 mt-3">
+                        <div class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title font-weight-bold" id="tituloCategoria">Encuestas de Categoría</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" onclick="$('#panelListaEncuestas').fadeOut();"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-striped table-valign-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre del Evento</th>
+                                            <th class="text-right">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cuerpoTablaEncuestas">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout :: footer}"></footer>
+</div>
+
+<div th:replace="~{layout :: scripts}"></div>
+
+<script>
+    const datosEncuestas = {
+        'culturales': [
+            { id: 101, nombre: "Obra de Teatro: Romeo y Julieta" }
+        ],
+        'cientificos': [],
+        'deportivos': [
+            { id: 201, nombre: "Torneo Intramuros de Basquetbol" },
+            { id: 202, nombre: "Carrera de Novatos 5K" }
+        ],
+        'comunidad': []
+    };
+
+    function mostrarEncuestas(categoriaClave, nombreVisible) {
+        const encuestas = datosEncuestas[categoriaClave];
+        const $cuerpoTabla = $('#cuerpoTablaEncuestas');
+        const $panel = $('#panelListaEncuestas');
+
+        $('#tituloCategoria').text('Encuestas disponibles: ' + nombreVisible);
+        $cuerpoTabla.empty();
+
+        if (encuestas.length === 0) {
+            $cuerpoTabla.append('<tr><td colspan="2" class="text-center text-muted">No tienes encuestas pendientes en esta categoría.</td></tr>');
+        } else {
+            encuestas.forEach(encuesta => {
+                $cuerpoTabla.append(`
+                    <tr>
+                        <td>${encuesta.nombre}</td>
+                        <td class="text-right">
+                            <a href="/estudiante/responder-encuesta?id=${encuesta.id}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i> Responder Encuesta
+                            </a>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+
+        $panel.hide().fadeIn();
+        $('html, body').animate({
+            scrollTop: $panel.offset().top - 50
+        }, 500);
+    }
+</script>
+</body>
+</html>

@@ -19,4 +19,22 @@ public class DashboardController {
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
         return "empleado/dashboard";
     }
+
+    @GetMapping("/estudiante/subir-evidencia")
+    public String subirEvidencia(HttpSession session, Model model) {
+        model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
+        return "estudiante/subir-evidencia";
+    }
+
+    @GetMapping("/estudiante/encuestas")
+    public String encuestas(HttpSession session, Model model) {
+        model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
+        return "estudiante/encuestas";
+    }
+
+    @GetMapping("/estudiante/proximos-eventos")
+    public String proximosEventos(HttpSession session, Model model) {
+        model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
+        return "estudiante/proximos-eventos";
+    }
 }

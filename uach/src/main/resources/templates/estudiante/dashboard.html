@@ -1,26 +1,124 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
-
-<head th:replace="~{layout :: head('Dashboard Estudiante')}">
-    <title>Dashboard Estudiante</title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Panel Estudiante')}">
+    <title>Panel Estudiante</title>
 </head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
 
-<body>
+    <!-- Navbar -->
+    <nav th:replace="~{layout :: navbar}"></nav>
 
-    <!-- Insertamos el Header del layout -->
-    <header th:replace="~{layout :: header}"></header>
+    <!-- Sidebar -->
+    <aside th:replace="~{layout :: sidebar-estudiante('eventos-cumplidos')}"></aside>
 
-    <main class="main-content">
-        <div class="card" style="max-width: 800px; text-align: center;">
-            <h2 style="color: var(--primary-color);">Bienvenido al Panel de Estudiante</h2>
-            <p style="font-size: 1.2rem; margin-top: 1rem;">Hola, <span th:text="${usuarioNombre}">Estudiante</span>.</p>
-            <p>Aquí podrás ver tus eventos culturales, sellos y actividades registradas.</p>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Mis Eventos Cumplidos</h1>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
 
-    <!-- Insertamos el Footer del layout -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>1/6</h3>
+                                <p>A. Culturales</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-theater-masks"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>3/6</h3>
+                                <p>A. Científicos</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-atom"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3 style="color: white;">2/6</h3>
+                                <p style="color: white;">A. Deportivos</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-running"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>1/6</h3>
+                                <p>Apoyo Comunidad</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-hands-helping"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Historial de Eventos</h3>
+                                <div class="card-tools ml-auto">
+                                    <select class="form-control form-control-sm" name="filtroTipo" id="filtroTipo">
+                                        <option value="todos">Todos los eventos</option>
+                                        <option value="cultural">Cultural</option>
+                                        <option value="cientifico">Científico</option>
+                                        <option value="deportivo">Deportivo</option>
+                                        <option value="comunidad">Apoyo a la comunidad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Evento</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Conferencia IA</td>
+                                            <td>Científico</td>
+                                            <td>12-May-2026</td>
+                                            <td><span class="badge bg-success">+1 Punto</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Torneo de Ajedrez</td>
+                                            <td>Deportivo</td>
+                                            <td>15-May-2026</td>
+                                            <td><span class="badge bg-success">+1 Punto</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
     <footer th:replace="~{layout :: footer}"></footer>
+</div>
 
+<div th:replace="~{layout :: scripts}"></div>
 </body>
-
 </html>
