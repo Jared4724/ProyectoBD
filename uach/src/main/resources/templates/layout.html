@@ -80,7 +80,7 @@
                     <img th:src="@{/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block" th:text="${usuarioNombre != null ? usuarioNombre : 'Estudiante'}">Estudiante</a>
+                    <a href="#" class="d-block" th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Estudiante'}">Estudiante</a>
                 </div>
             </div>
 
@@ -132,7 +132,7 @@
                     <img th:src="@{/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block" th:text="${usuarioNombre != null ? usuarioNombre : 'Empleado'}">Empleado</a>
+                    <a href="#" class="d-block" th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Empleado'}">Empleado</a>
                 </div>
             </div>
 
@@ -143,6 +143,12 @@
                         <a th:href="@{/dashboard/empleado}" class="nav-link" th:classappend="${activeMenu == 'dashboard'} ? 'active' : ''">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Panel Principal</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/empleado/eventos}" class="nav-link" th:classappend="${activeMenu == 'eventos'} ? 'active' : ''">
+                            <i class="nav-icon fas fa-calendar-alt"></i>
+                            <p>Gestión de Eventos</p>
                         </a>
                     </li>
                     <!-- Add more employee menus here in the future -->

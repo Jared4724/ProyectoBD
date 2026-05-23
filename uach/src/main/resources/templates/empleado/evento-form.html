@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Formulario de Evento')}">
+    <title>Formulario de Evento</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <aside th:replace="~{layout :: sidebar-empleado('eventos')}"></aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0" th:text="${evento.idEvento == null ? 'Crear Nuevo Evento' : 'Editar Evento'}">Formulario de Evento</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <!-- Card Primary AdminLTE -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title" th:text="${evento.idEvento == null ? 'Detalles del Nuevo Evento' : 'Actualizar Detalles del Evento'}">Detalles</h3>
+                            </div>
+                            
+                            <form th:action="@{/empleado/eventos/guardar}" th:object="${evento}" method="post">
+                                <!-- ID oculto para edición -->
+                                <input type="hidden" th:field="*{idEvento}" />
+                                
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="nombreEvento">Nombre del Evento</label>
+                                        <input type="text" class="form-control" id="nombreEvento" th:field="*{nombreEvento}" placeholder="Ingresa el nombre del evento" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="descripcion">Descripción</label>
+                                        <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3" placeholder="Descripción breve del evento"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="fecha">Fecha y Hora</label>
+                                        <!-- Se utiliza datetime-local para vincular correctamente con LocalDateTime -->
+                                        <input type="datetime-local" class="form-control" id="fecha" th:field="*{fecha}" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="ubicacion">Ubicación</label>
+                                        <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}" placeholder="Lugar donde se realizará" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="puntos">Puntos Culturales</label>
+                                        <input type="number" class="form-control" id="puntos" th:field="*{puntos}" placeholder="Ej. 1, 2, 5" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="categoria">Categoría</label>
+                                        <select class="form-control" id="categoria" th:field="*{categoria.idCategoria}" required>
+                                            <option value="" disabled selected th:if="${evento.idEvento == null}">-- Selecciona una Categoría --</option>
+                                            <option th:each="cat : ${categorias}" 
+                                                    th:value="${cat.idCategoria}" 
+                                                    th:text="${cat.nombreCategoria}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer text-right">
+                                    <a th:href="@{/empleado/eventos}" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout :: footer}"></footer>
+</div>
+
+<div th:replace="~{layout :: scripts}"></div>
+</body>
+</html>
