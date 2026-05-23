@@ -22,7 +22,7 @@ public class AuthController {
     public String showLoginForm(HttpSession session) {
         if (session.getAttribute("usuarioId") != null) {
             String rol = (String) session.getAttribute("rol");
-            if ("ESTUDIANTE".equals(rol)) return "redirect:/dashboard/estudiante";
+            if ("ESTUDIANTE".equals(rol)) return "redirect:/estudiante/eventos";
             if ("EMPLEADO".equals(rol)) return "redirect:/dashboard/empleado";
         }
         return "login";
@@ -45,7 +45,7 @@ public class AuthController {
             // Redirigir según el tipo de usuario
             if (usuario instanceof Estudiante) {
                 session.setAttribute("rol", "ESTUDIANTE");
-                return "redirect:/dashboard/estudiante";
+                return "redirect:/estudiante/eventos";
             } else if (usuario instanceof Empleado) {
                 session.setAttribute("rol", "EMPLEADO");
                 return "redirect:/dashboard/empleado";

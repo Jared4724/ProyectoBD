@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardController {
 
-    @GetMapping("/dashboard/estudiante")
+    @GetMapping("/estudiante/eventos")
     public String dashboardEstudiante(HttpSession session, Model model) {
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        return "estudiante/dashboard";
+        return "estudiante/eventos";
     }
 
     @GetMapping("/dashboard/empleado")
