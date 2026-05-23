@@ -58,13 +58,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Feria de Ciencias</td>
-                                            <td>Científico</td>
-                                            <td>25-May-2026</td>
-                                            <td>Facultad de Ingeniería</td>
-                                            <td>2</td>
+                                        <tr th:each="evento : ${eventos}">
+                                            <td th:text="${evento.nombreEvento}">Feria de Ciencias</td>
+                                            <td th:text="${evento.categoria != null ? evento.categoria.nombreCategoria : 'N/A'}">Científico</td>
+                                            <td th:text="${#temporals.format(evento.fecha, 'dd-MMM-yyyy HH:mm')}">25-May-2026</td>
+                                            <td th:text="${evento.ubicacion}">Facultad de Ingeniería</td>
+                                            <td th:text="${evento.puntos}">2</td>
                                             <td><button class="btn btn-sm btn-primary">Inscribirme</button></td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(eventos)}">
+                                            <td colspan="6" class="text-center">No hay eventos próximos disponibles.</td>
                                         </tr>
                                     </tbody>
                                 </table>

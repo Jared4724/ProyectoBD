@@ -35,4 +35,10 @@ public interface EventoService {
      * @param id Identificador del evento.
      */
     void eliminarEvento(Long id);
+    
+    /**
+     * Obtiene la lista de eventos disponibles (con fecha futura).
+     * @return Lista de eventos próximos.
+     */
+    List<Evento> listarEventosDisponibles();
 }
