@@ -1,88 +1,109 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head('Panel Empleado')}">
     <title>Panel Empleado</title>
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+    <div class="wrapper">
 
-    <!-- Navbar -->
-    <nav th:replace="~{layout :: navbar}"></nav>
+        <!-- Navbar -->
+        <nav th:replace="~{layout :: navbar}"></nav>
 
-    <!-- Sidebar -->
-    <aside th:replace="~{layout :: sidebar-empleado('dashboard')}"></aside>
+        <!-- Sidebar -->
+        <aside th:replace="~{layout :: sidebar-empleado('dashboard')}"></aside>
 
-    <!-- Content Wrapper -->
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Panel Principal - Empleado</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h3 class="card-title">Bienvenido al Panel de Administración</h3>
-                            </div>
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Estudiante</th>
-                                            <th>Evento</th>
-                                            <th>Fecha Subida</th>
-                                            <th>Evidencia</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="evidencia : ${evidencias}">
-                                            <td th:text="${evidencia.estudiante.idUsuario} + ' - ' + ${evidencia.estudiante.nombre} + ' ' + ${evidencia.estudiante.apellido}">Matricula - Nombre</td>
-                                            <td th:text="${evidencia.evento.nombreEvento}">Nombre del Evento</td>
-                                            <td th:text="${#temporals.format(evidencia.fechaRegistro, 'dd/MM/yyyy HH:mm')}">Fecha</td>
-                                            <td>
-                                                <a th:href="@{'/' + ${#strings.replace(evidencia.evidencia, '\', '/')}}" target="_blank" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-eye"></i> Ver Foto
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <form th:action="@{/empleado/aprobar-evidencia}" method="post" style="display:inline;">
-                                                    <input type="hidden" name="matricula" th:value="${evidencia.estudiante.idUsuario}" />
-                                                    <input type="hidden" name="id_evento" th:value="${evidencia.evento.idEvento}" />
-                                                    <button type="submit" class="btn btn-sm btn-success" title="Aprobar"><i class="fas fa-check"></i></button>
-                                                </form>
-                                                <form th:action="@{/empleado/rechazar-evidencia}" method="post" style="display:inline;">
-                                                    <input type="hidden" name="matricula" th:value="${evidencia.estudiante.idUsuario}" />
-                                                    <input type="hidden" name="id_evento" th:value="${evidencia.evento.idEvento}" />
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Rechazar"><i class="fas fa-times"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        <tr th:if="${#lists.isEmpty(evidencias)}">
-                                            <td colspan="5" class="text-center">No hay evidencias pendientes por validar.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Panel Principal - Empleado</h1>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Bienvenido al Panel de Administración</h3>
+                                </div>
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-hover text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Estudiante</th>
+                                                <th>Evento</th>
+                                                <th>Descripción</th>
+                                                <th>Fecha Subida</th>
+                                                <th>Evidencia</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="evidencia : ${evidencias}">
+                                                <td
+                                                    th:text="${evidencia.estudiante.idUsuario} + ' - ' + ${evidencia.estudiante.nombre} + ' ' + ${evidencia.estudiante.apellido}">
+                                                    Matricula - Nombre</td>
+                                                <td th:text="${evidencia.evento.nombreEvento}">Nombre del Evento</td>
+                                                <td th:title="${evidencia.descripcion}"
+                                                    th:text="${#strings.length(evidencia.descripcion) > 20 ? #strings.substring(evidencia.descripcion,0,20) + '...' : evidencia.descripcion}">
+                                                    Descripción</td>
+                                                <td
+                                                    th:text="${#temporals.format(evidencia.fechaRegistro, 'dd/MM/yyyy HH:mm')}">
+                                                    Fecha</td>
+                                                <td>
+                                                    <a th:href="@{'/' + ${#strings.replace(evidencia.evidencia, '\', '/')}}"
+                                                        target="_blank" class="btn btn-sm btn-info">
+                                                        <i class="fas fa-eye"></i> Ver Foto
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <form th:action="@{/empleado/aprobar-evidencia}" method="post"
+                                                        style="display:inline;">
+                                                        <input type="hidden" name="matricula"
+                                                            th:value="${evidencia.estudiante.idUsuario}" />
+                                                        <input type="hidden" name="id_evento"
+                                                            th:value="${evidencia.evento.idEvento}" />
+                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                            title="Aprobar"><i class="fas fa-check"></i></button>
+                                                    </form>
+                                                    <form th:action="@{/empleado/rechazar-evidencia}" method="post"
+                                                        style="display:inline;">
+                                                        <input type="hidden" name="matricula"
+                                                            th:value="${evidencia.estudiante.idUsuario}" />
+                                                        <input type="hidden" name="id_evento"
+                                                            th:value="${evidencia.evento.idEvento}" />
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                            title="Rechazar"><i class="fas fa-times"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr th:if="${#lists.isEmpty(evidencias)}">
+                                                <td colspan="6" class="text-center">No hay evidencias pendientes por
+                                                    validar.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer th:replace="~{layout :: footer}"></footer>
     </div>
 
-    <!-- Footer -->
-    <footer th:replace="~{layout :: footer}"></footer>
-</div>
-
-<div th:replace="~{layout :: scripts}"></div>
+    <div th:replace="~{layout :: scripts}"></div>
 </body>
+
 </html>
