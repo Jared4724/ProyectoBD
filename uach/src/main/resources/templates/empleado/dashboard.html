@@ -32,9 +32,45 @@
                             <div class="card-header">
                                 <h3 class="card-title">Bienvenido al Panel de Administración</h3>
                             </div>
-                            <div class="card-body">
-                                <p style="font-size: 1.2rem; margin-top: 1rem;">Hola, <span th:text="${usuarioNombre}">Empleado</span>.</p>
-                                <p>Aquí podrás gestionar los eventos culturales, validaciones y otras actividades administrativas del Carnet Cultural.</p>
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Estudiante</th>
+                                            <th>Evento</th>
+                                            <th>Fecha Subida</th>
+                                            <th>Evidencia</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="evidencia : ${evidencias}">
+                                            <td th:text="${evidencia.estudiante.idUsuario} + ' - ' + ${evidencia.estudiante.nombre} + ' ' + ${evidencia.estudiante.apellido}">Matricula - Nombre</td>
+                                            <td th:text="${evidencia.evento.nombreEvento}">Nombre del Evento</td>
+                                            <td th:text="${#temporals.format(evidencia.fechaRegistro, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                                            <td>
+                                                <a th:href="@{'/' + ${#strings.replace(evidencia.evidencia, '\', '/')}}" target="_blank" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i> Ver Foto
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/empleado/aprobar-evidencia}" method="post" style="display:inline;">
+                                                    <input type="hidden" name="matricula" th:value="${evidencia.estudiante.idUsuario}" />
+                                                    <input type="hidden" name="id_evento" th:value="${evidencia.evento.idEvento}" />
+                                                    <button type="submit" class="btn btn-sm btn-success" title="Aprobar"><i class="fas fa-check"></i></button>
+                                                </form>
+                                                <form th:action="@{/empleado/rechazar-evidencia}" method="post" style="display:inline;">
+                                                    <input type="hidden" name="matricula" th:value="${evidencia.estudiante.idUsuario}" />
+                                                    <input type="hidden" name="id_evento" th:value="${evidencia.evento.idEvento}" />
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Rechazar"><i class="fas fa-times"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(evidencias)}">
+                                            <td colspan="5" class="text-center">No hay evidencias pendientes por validar.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

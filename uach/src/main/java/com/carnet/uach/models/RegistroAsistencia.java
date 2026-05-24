@@ -12,12 +12,12 @@ public class RegistroAsistencia {
     @EmbeddedId
     private RegistroAsistenciaId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("idEvento")
     @JoinColumn(name = "id_evento")
     private Evento evento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("matricula")
     @JoinColumn(name = "matricula")
     private Estudiante estudiante;

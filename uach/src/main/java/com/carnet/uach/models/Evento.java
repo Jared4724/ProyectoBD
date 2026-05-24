@@ -29,11 +29,11 @@ public class Evento {
     @Column(nullable = false)
     private Integer puntos;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false) // Organizador
     private Empleado organizador;
 }

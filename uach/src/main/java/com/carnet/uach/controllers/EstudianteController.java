@@ -2,6 +2,8 @@ package com.carnet.uach.controllers;
 
 import com.carnet.uach.services.EventoService;
 import com.carnet.uach.services.RegistroAsistenciaService;
+import java.util.List;
+import com.carnet.uach.models.RegistroAsistencia;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,39 @@ public class EstudianteController {
 
     @GetMapping("/eventos")
     public String dashboardEstudiante(HttpSession session, Model model) {
+        Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
+        
+        List<RegistroAsistencia> confirmados = registroAsistenciaService.obtenerRegistrosConfirmados(matricula);
+        
+        int puntosArtistica = 0;
+        int puntosCientifica = 0;
+        int puntosDeportiva = 0;
+        int puntosHerramientas = 0;
+        int puntosSalud = 0;
+        int puntosComunidad = 0;
+        
+        for (RegistroAsistencia r : confirmados) {
+            if (r.getEvento() != null && r.getEvento().getCategoria() != null) {
+                String cat = r.getEvento().getCategoria().getNombreCategoria().toUpperCase();
+                int pts = r.getEvento().getPuntos();
+                if (cat.contains("ARTISTICA") || cat.contains("CULTURAL")) puntosArtistica += pts;
+                else if (cat.contains("CIENTIFICO") || cat.contains("FILOSOFICA")) puntosCientifica += pts;
+                else if (cat.contains("DEPORTIV")) puntosDeportiva += pts;
+                else if (cat.contains("HERRAMIENTAS")) puntosHerramientas += pts;
+                else if (cat.contains("SALUD")) puntosSalud += pts;
+                else if (cat.contains("COMUNIDAD")) puntosComunidad += pts;
+            }
+        }
+        
+        model.addAttribute("puntosArtistica", Math.min(puntosArtistica, 6));
+        model.addAttribute("puntosCientifica", Math.min(puntosCientifica, 6));
+        model.addAttribute("puntosDeportiva", Math.min(puntosDeportiva, 6));
+        model.addAttribute("puntosHerramientas", Math.min(puntosHerramientas, 8));
+        model.addAttribute("puntosSalud", Math.min(puntosSalud, 6));
+        model.addAttribute("puntosComunidad", Math.min(puntosComunidad, 6));
+        model.addAttribute("historial", confirmados);
+        
         return "estudiante/eventos";
     }
 

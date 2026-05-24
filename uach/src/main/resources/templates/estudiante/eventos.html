@@ -28,38 +28,56 @@
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3>1/6</h3>
-                                <p>A. Culturales</p>
+                                <h3 th:text="${puntosArtistica} + '/6'">0/6</h3>
+                                <p>Artística</p>
                             </div>
                             <div class="icon"><i class="fas fa-theater-masks"></i></div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3>3/6</h3>
-                                <p>A. Científicos</p>
+                                <h3 th:text="${puntosCientifica} + '/6'">0/6</h3>
+                                <p>Científico-Filosófica</p>
                             </div>
                             <div class="icon"><i class="fas fa-atom"></i></div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3 style="color: white;">2/6</h3>
-                                <p style="color: white;">A. Deportivos</p>
+                                <h3 style="color: white;" th:text="${puntosDeportiva} + '/6'">0/6</h3>
+                                <p style="color: white;">Deportiva</p>
                             </div>
                             <div class="icon"><i class="fas fa-running"></i></div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h3 th:text="${puntosHerramientas} + '/8'">0/8</h3>
+                                <p>Herramientas para mi Futuro</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-tools"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>1/6</h3>
-                                <p>Apoyo Comunidad</p>
+                                <h3 th:text="${puntosSalud} + '/6'">0/6</h3>
+                                <p>Salud</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-heartbeat"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box bg-purple" style="background-color: #6f42c1; color: white;">
+                            <div class="inner">
+                                <h3 th:text="${puntosComunidad} + '/6'">0/6</h3>
+                                <p>Apoyo a tu Comunidad</p>
                             </div>
                             <div class="icon"><i class="fas fa-hands-helping"></i></div>
                         </div>
@@ -70,16 +88,7 @@
                     <div class="col-12">
                         <div class="card card-primary card-outline">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Historial de Eventos</h3>
-                                <div class="card-tools ml-auto">
-                                    <select class="form-control form-control-sm" name="filtroTipo" id="filtroTipo">
-                                        <option value="todos">Todos los eventos</option>
-                                        <option value="cultural">Cultural</option>
-                                        <option value="cientifico">Científico</option>
-                                        <option value="deportivo">Deportivo</option>
-                                        <option value="comunidad">Apoyo a la comunidad</option>
-                                    </select>
-                                </div>
+                                <h3 class="card-title">Historial de Eventos Aprobados</h3>
                             </div>
                             
                             <div class="card-body table-responsive p-0">
@@ -87,23 +96,20 @@
                                     <thead>
                                         <tr>
                                             <th>Evento</th>
-                                            <th>Tipo</th>
-                                            <th>Fecha</th>
+                                            <th>Categoría</th>
+                                            <th>Fecha Confirmación</th>
                                             <th>Valor</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Conferencia IA</td>
-                                            <td>Científico</td>
-                                            <td>12-May-2026</td>
-                                            <td><span class="badge bg-success">+1 Punto</span></td>
+                                        <tr th:each="registro : ${historial}">
+                                            <td th:text="${registro.evento.nombreEvento}">Conferencia IA</td>
+                                            <td th:text="${registro.evento.categoria != null ? registro.evento.categoria.nombreCategoria : 'N/A'}">Científico</td>
+                                            <td th:text="${#temporals.format(registro.fechaRegistro, 'dd/MM/yyyy')}">12-May-2026</td>
+                                            <td><span class="badge bg-success" th:text="'+' + ${registro.evento.puntos} + ' Puntos'">+1 Punto</span></td>
                                         </tr>
-                                        <tr>
-                                            <td>Torneo de Ajedrez</td>
-                                            <td>Deportivo</td>
-                                            <td>15-May-2026</td>
-                                            <td><span class="badge bg-success">+1 Punto</span></td>
+                                        <tr th:if="${#lists.isEmpty(historial)}">
+                                            <td colspan="4" class="text-center">Aún no tienes eventos aprobados en tu historial.</td>
                                         </tr>
                                     </tbody>
                                 </table>

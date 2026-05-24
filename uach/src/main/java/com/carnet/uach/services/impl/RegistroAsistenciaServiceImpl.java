@@ -64,4 +64,37 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
 
         registroAsistenciaRepository.save(registro);
     }
+
+    @Override
+    public java.util.List<RegistroAsistencia> listarEvidenciasPendientes() {
+        return registroAsistenciaRepository.findByAsistenciaConfirmadaFalse();
+    }
+
+    @Override
+    public void aprobarEvidencia(Long matricula, Long idEvento) {
+        RegistroAsistenciaId id = new RegistroAsistenciaId();
+        id.setMatricula(matricula);
+        id.setIdEvento(idEvento);
+
+        RegistroAsistencia registro = registroAsistenciaRepository.findById(id).orElse(null);
+        if (registro != null) {
+            registro.setAsistenciaConfirmada(true);
+            registroAsistenciaRepository.save(registro);
+        }
+    }
+
+    @Override
+    public void rechazarEvidencia(Long matricula, Long idEvento) {
+        RegistroAsistenciaId id = new RegistroAsistenciaId();
+        id.setMatricula(matricula);
+        id.setIdEvento(idEvento);
+        
+        // Se elimina el registro para que el estudiante pueda volver a intentarlo
+        registroAsistenciaRepository.deleteById(id);
+    }
+
+    @Override
+    public java.util.List<RegistroAsistencia> obtenerRegistrosConfirmados(Long matricula) {
+        return registroAsistenciaRepository.findByEstudiante_IdUsuarioAndAsistenciaConfirmadaTrue(matricula);
+    }
 }

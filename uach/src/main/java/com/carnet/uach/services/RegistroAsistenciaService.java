@@ -15,4 +15,12 @@ public interface RegistroAsistenciaService {
      * @throws IOException Si hay un error guardando el archivo.
      */
     void guardarEvidencia(Long matricula, Long idEvento, String descripcion, MultipartFile archivo) throws IOException;
+
+    java.util.List<com.carnet.uach.models.RegistroAsistencia> listarEvidenciasPendientes();
+
+    void aprobarEvidencia(Long matricula, Long idEvento);
+
+    void rechazarEvidencia(Long matricula, Long idEvento);
+
+    java.util.List<com.carnet.uach.models.RegistroAsistencia> obtenerRegistrosConfirmados(Long matricula);
 }
