@@ -8,5 +8,4 @@ import java.util.List;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
     List<Evento> findByFechaAfter(java.time.LocalDateTime fecha);
-    List<Evento> findByFechaBefore(java.time.LocalDateTime fecha);
 }

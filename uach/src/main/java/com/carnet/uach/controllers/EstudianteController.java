@@ -64,8 +64,8 @@ public class EstudianteController {
     @GetMapping("/subir-evidencia")
     public String subirEvidencia(HttpSession session, Model model) {
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        // Se listan los eventos pasados para subir evidencia
-        model.addAttribute("eventos", eventoService.listarEventosPasados());
+        // Se listan los eventos cuya fecha límite aún no ha pasado
+        model.addAttribute("eventos", eventoService.listarEventosDisponibles());
         return "estudiante/subir-evidencia";
     }
 
