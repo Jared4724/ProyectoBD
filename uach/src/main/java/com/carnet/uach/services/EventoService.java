@@ -41,4 +41,10 @@ public interface EventoService {
      * @return Lista de eventos próximos.
      */
     List<Evento> listarEventosDisponibles();
+
+    /**
+     * Obtiene la lista de eventos que ya ocurrieron (fecha pasada).
+     * @return Lista de eventos pasados.
+     */
+    List<Evento> listarEventosPasados();
 }

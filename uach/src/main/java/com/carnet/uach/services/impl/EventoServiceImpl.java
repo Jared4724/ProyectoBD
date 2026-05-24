@@ -55,4 +55,9 @@ public class EventoServiceImpl implements EventoService {
     public List<Evento> listarEventosDisponibles() {
         return eventoRepository.findByFechaAfter(java.time.LocalDateTime.now());
     }
+
+    @Override
+    public List<Evento> listarEventosPasados() {
+        return eventoRepository.findByFechaBefore(java.time.LocalDateTime.now());
+    }
 }

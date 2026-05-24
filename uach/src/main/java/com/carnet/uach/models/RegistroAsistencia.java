@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "RegistroAsistencia")
+@Table(name = "registroasistencia")
 @Data
 public class RegistroAsistencia {
 
@@ -30,4 +30,7 @@ public class RegistroAsistencia {
 
     @Column(length = 500, nullable = false)
     private String evidencia;
+
+    @Column(length = 1000)
+    private String descripcion;
 }

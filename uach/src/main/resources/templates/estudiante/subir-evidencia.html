@@ -34,6 +34,12 @@
                         <span th:text="${mensajeExito}"></span>
                     </div>
 
+                    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> ¡Error!</h5>
+                        <span th:text="${mensajeError}"></span>
+                    </div>
+
                     <div class="row">
                         <div class="col-12">
                             <div class="card card-primary card-outline">
@@ -41,18 +47,17 @@
                                     <h3 class="card-title">Detalles de la Evidencia</h3>
                                 </div>
 
-                                <form action="/estudiante/guardar-evidencia" method="post"
+                                <form th:action="@{/estudiante/guardar-evidencia}" method="post"
                                     enctype="multipart/form-data">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="eventoSelect">Nombre del Evento</label>
-                                                    <select class="form-control" id="eventoSelect" name="id_evento">
+                                                    <select class="form-control" id="eventoSelect" name="id_evento" required>
                                                         <option value="" disabled selected>Selecciona el evento al que
                                                             asististe...</option>
-                                                        <option value="1">Conferencia de Inteligencia Artificial
-                                                        </option>
+                                                        <option th:each="evento : ${eventos}" th:value="${evento.idEvento}" th:text="${evento.nombreEvento}"></option>
                                                     </select>
                                                 </div>
                                             </div>
