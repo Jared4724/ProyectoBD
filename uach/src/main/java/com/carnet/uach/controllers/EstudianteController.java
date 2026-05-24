@@ -63,9 +63,17 @@ public class EstudianteController {
 
     @GetMapping("/subir-evidencia")
     public String subirEvidencia(HttpSession session, Model model) {
+        Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
+        
         // Se listan los eventos cuya fecha límite aún no ha pasado
-        model.addAttribute("eventos", eventoService.listarEventosDisponibles());
+        List<com.carnet.uach.models.Evento> disponibles = eventoService.listarEventosDisponibles();
+        
+        // Filtramos los eventos para los que el alumno ya mandó evidencia (pendiente o aprobada)
+        List<RegistroAsistencia> enviados = registroAsistenciaService.obtenerRegistrosPorEstudiante(matricula);
+        disponibles.removeIf(evento -> enviados.stream().anyMatch(r -> r.getEvento().getIdEvento().equals(evento.getIdEvento())));
+        
+        model.addAttribute("eventos", disponibles);
         return "estudiante/subir-evidencia";
     }
 
@@ -76,6 +84,11 @@ public class EstudianteController {
             @RequestParam("evidencia_file") MultipartFile archivo,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
+        
+        if (descripcion == null || descripcion.trim().isEmpty() || archivo == null || archivo.isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Todos los campos son obligatorios (Descripción y Evidencia).");
+            return "redirect:/estudiante/subir-evidencia";
+        }
         
         Long matricula = (Long) session.getAttribute("usuarioId");
 

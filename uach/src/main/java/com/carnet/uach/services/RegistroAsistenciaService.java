@@ -23,4 +23,6 @@ public interface RegistroAsistenciaService {
     void rechazarEvidencia(Long matricula, Long idEvento);
 
     java.util.List<com.carnet.uach.models.RegistroAsistencia> obtenerRegistrosConfirmados(Long matricula);
+
+    java.util.List<com.carnet.uach.models.RegistroAsistencia> obtenerRegistrosPorEstudiante(Long matricula);
 }

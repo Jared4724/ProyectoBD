@@ -97,4 +97,9 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
     public java.util.List<RegistroAsistencia> obtenerRegistrosConfirmados(Long matricula) {
         return registroAsistenciaRepository.findByEstudiante_IdUsuarioAndAsistenciaConfirmadaTrue(matricula);
     }
+
+    @Override
+    public java.util.List<RegistroAsistencia> obtenerRegistrosPorEstudiante(Long matricula) {
+        return registroAsistenciaRepository.findByEstudiante_IdUsuario(matricula);
+    }
 }

@@ -13,4 +13,6 @@ public interface RegistroAsistenciaRepository extends JpaRepository<RegistroAsis
     List<RegistroAsistencia> findByAsistenciaConfirmadaFalse();
     
     List<RegistroAsistencia> findByEstudiante_IdUsuarioAndAsistenciaConfirmadaTrue(Long matricula);
+    
+    List<RegistroAsistencia> findByEstudiante_IdUsuario(Long matricula);
 }
