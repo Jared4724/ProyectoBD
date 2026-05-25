@@ -2,13 +2,15 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <!-- Fragmento para el HEAD -->
+
 <head th:fragment="head(title)">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${title} + ' | Carnet Cultural UACH'">Carnet Cultural | Panel</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
     <!-- Theme style -->
@@ -17,17 +19,33 @@
     <!-- Colores personalizados UACH -->
     <style>
         :root {
-            --primary-color: #5b2c6f; /* Morado UACH */
+            --primary-color: #5b2c6f;
+            /* Morado UACH */
             --primary-hover: #4a235a;
-            --accent-color: #d4af37; /* Dorado UACH */
+            --accent-color: #d4af37;
+            /* Dorado UACH */
         }
-        
-        .bg-primary { background-color: var(--primary-color) !important; color: #fff !important; }
-        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
-        .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
-        .text-primary { color: var(--primary-color) !important; }
-        
-        .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, 
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+            color: #fff !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
         .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
             background-color: var(--primary-color);
             color: #fff;
@@ -49,15 +67,13 @@
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a th:href="@{/}" class="nav-link">Inicio</a>
-            </li>
         </ul>
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:if="${session.usuarioId != null}" th:href="@{/logout}" style="color: #dc3545; font-weight: bold;">
+                <a class="nav-link" th:if="${session.usuarioId != null}" th:href="@{/logout}"
+                    style="color: #dc3545; font-weight: bold;">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </a>
             </li>
@@ -67,46 +83,53 @@
     <!-- Fragmento SIDEBAR Estudiante -->
     <aside th:fragment="sidebar-estudiante(activeMenu)" class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a th:href="@{/}" class="brand-link">
-            <img th:src="@{/dist/img/AdminLTELogo.png}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">UACh - Carnet Cultural</span>
-        </a>
+        <div class="brand-link" style="border-bottom: 1px solid #4a235a;">
+            <img th:src="@{/dist/img/AdminLTELogo.png}" alt="Logo" class="brand-image img-circle elevation-3"
+                style="opacity: .8">
+            <span class="brand-text font-weight-light">Carnet Cultural</span>
+        </div>
 
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img th:src="@{/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                <div class="image" style="padding-left: 0.8rem;">
+                    <i class="fas fa-user-circle fa-2x" style="color: #c2c7d0;"></i>
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block" th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Estudiante'}">Estudiante</a>
+                    <span class="d-block" style="color: #c2c7d0;"
+                        th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Estudiante'}">Estudiante</span>
                 </div>
             </div>
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
                     <li class="nav-item">
-                        <a th:href="@{/estudiante/eventos}" class="nav-link" th:classappend="${activeMenu == 'eventos-cumplidos'} ? 'active' : ''">
+                        <a th:href="@{/estudiante/eventos}" class="nav-link"
+                            th:classappend="${activeMenu == 'eventos-cumplidos'} ? 'active' : ''">
                             <i class="nav-icon fas fa-check-circle"></i>
                             <p>Eventos Cumplidos</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/estudiante/subir-evidencia}" class="nav-link" th:classappend="${activeMenu == 'subir-evidencia'} ? 'active' : ''">
+                        <a th:href="@{/estudiante/subir-evidencia}" class="nav-link"
+                            th:classappend="${activeMenu == 'subir-evidencia'} ? 'active' : ''">
                             <i class="nav-icon fas fa-upload"></i>
                             <p>Subir Evidencia</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/estudiante/encuestas}" class="nav-link" th:classappend="${activeMenu == 'encuestas'} ? 'active' : ''">
+                        <a th:href="@{/estudiante/encuestas}" class="nav-link"
+                            th:classappend="${activeMenu == 'encuestas'} ? 'active' : ''">
                             <i class="nav-icon fas fa-clipboard-list"></i>
                             <p>Encuestas Pendientes</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/estudiante/proximos-eventos}" class="nav-link" th:classappend="${activeMenu == 'proximos-eventos'} ? 'active' : ''">
+                        <a th:href="@{/estudiante/proximos-eventos}" class="nav-link"
+                            th:classappend="${activeMenu == 'proximos-eventos'} ? 'active' : ''">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>Próximos Eventos</p>
                         </a>
@@ -119,34 +142,39 @@
     <!-- Fragmento SIDEBAR Empleado -->
     <aside th:fragment="sidebar-empleado(activeMenu)" class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a th:href="@{/}" class="brand-link">
-            <img th:src="@{/dist/img/AdminLTELogo.png}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <div class="brand-link" style="border-bottom: 1px solid #4a235a;">
+            <img th:src="@{/dist/img/AdminLTELogo.png}" alt="Logo" class="brand-image img-circle elevation-3"
+                style="opacity: .8">
             <span class="brand-text font-weight-light">UACh - Carnet Cultural</span>
-        </a>
+        </div>
 
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img th:src="@{/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+                <div class="image" style="padding-left: 0.8rem;">
+                    <i class="fas fa-user-circle fa-2x" style="color: #c2c7d0;"></i>
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block" th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Empleado'}">Empleado</a>
+                    <span class="d-block" style="color: #c2c7d0;"
+                        th:text="${session.usuarioNombre != null ? session.usuarioNombre : 'Empleado'}">Empleado</span>
                 </div>
             </div>
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
                     <li class="nav-item">
-                        <a th:href="@{/dashboard/empleado}" class="nav-link" th:classappend="${activeMenu == 'dashboard'} ? 'active' : ''">
+                        <a th:href="@{/dashboard/empleado}" class="nav-link"
+                            th:classappend="${activeMenu == 'dashboard'} ? 'active' : ''">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Panel Principal</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/empleado/eventos}" class="nav-link" th:classappend="${activeMenu == 'eventos'} ? 'active' : ''">
+                        <a th:href="@{/empleado/eventos}" class="nav-link"
+                            th:classappend="${activeMenu == 'eventos'} ? 'active' : ''">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>Gestión de Eventos</p>
                         </a>
@@ -158,11 +186,7 @@
     </aside>
 
     <!-- Fragmento FOOTER -->
-    <footer th:fragment="footer" class="main-footer">
-        <div class="float-right d-none d-sm-inline">
-            Sistema de Carnet Cultural
-        </div>
-        <strong>&copy; <span th:text="${#dates.year(#dates.createNow())}"></span> Universidad Autónoma de Chihuahua.</strong> Todos los derechos reservados.
+    <footer th:fragment="footer" class="main-footer d-none">
     </footer>
 
     <!-- Fragmento SCRIPTS -->
@@ -176,4 +200,5 @@
     </div>
 
 </body>
+
 </html>
