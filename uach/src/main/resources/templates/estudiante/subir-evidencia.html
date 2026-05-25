@@ -51,7 +51,7 @@
                                     enctype="multipart/form-data">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-8">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="eventoSelect">Nombre del Evento</label>
                                                     <select class="form-control" id="eventoSelect" name="id_evento" required>
@@ -61,19 +61,13 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="fechaEvento">Fecha</label>
-                                                    <input type="text" class="form-control" id="fechaEvento"
-                                                        placeholder="dd/mm/aaaa" disabled>
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="descripcionEvidencia">Descripción del evento</label>
                                             <textarea class="form-control" id="descripcionEvidencia" name="descripcion"
-                                                rows="4" placeholder="Escribe un breve resumen..." required></textarea>
+                                                rows="4" placeholder="Escribe un breve resumen..." required maxlength="1000"></textarea>
+                                            <small class="form-text text-muted text-right">Máximo 1000 caracteres</small>
                                         </div>
 
                                         <div class="form-group">
