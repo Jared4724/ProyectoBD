@@ -41,5 +41,13 @@ public interface EventoService {
      * @return Lista de eventos próximos.
      */
     List<Evento> listarEventosDisponibles();
+    
+    /**
+     * Obtiene la lista de eventos disponibles filtrada por mes y categoría.
+     * @param mes Mes del evento (1-12) o null para no filtrar por mes.
+     * @param idCategoria ID de la categoría o null/vacío para no filtrar por categoría.
+     * @return Lista de eventos próximos filtrados.
+     */
+    List<Evento> filtrarEventosDisponibles(Integer mes, String idCategoria);
 
 }

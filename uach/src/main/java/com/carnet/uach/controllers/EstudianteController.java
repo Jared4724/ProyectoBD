@@ -4,6 +4,7 @@ import com.carnet.uach.services.EventoService;
 import com.carnet.uach.services.RegistroAsistenciaService;
 import java.util.List;
 import com.carnet.uach.models.RegistroAsistencia;
+import com.carnet.uach.repositories.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class EstudianteController {
 
     private final EventoService eventoService;
     private final RegistroAsistenciaService registroAsistenciaService;
+    private final CategoriaRepository categoriaRepository;
 
     @GetMapping("/eventos")
     public String dashboardEstudiante(HttpSession session, Model model) {
@@ -109,9 +111,20 @@ public class EstudianteController {
     }
 
     @GetMapping("/proximos-eventos")
-    public String proximosEventos(HttpSession session, Model model) {
+    public String proximosEventos(@RequestParam(required = false) Integer mes,
+                                  @RequestParam(required = false) String idCategoria,
+                                  @RequestParam(required = false) Boolean filter,
+                                  HttpSession session, Model model) {
+        // Si no hay filtro explícito y es la primera vez que entra, usamos el mes actual.
+        if (mes == null && (filter == null || !filter)) {
+            mes = java.time.LocalDate.now().getMonthValue();
+        }
+        
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        model.addAttribute("eventos", eventoService.listarEventosDisponibles());
+        model.addAttribute("eventos", eventoService.filtrarEventosDisponibles(mes, idCategoria));
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        model.addAttribute("mesSeleccionado", mes);
+        model.addAttribute("categoriaSeleccionada", idCategoria);
         return "estudiante/proximos-eventos";
     }
 }
