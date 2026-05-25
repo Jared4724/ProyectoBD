@@ -20,7 +20,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Panel Principal - Empleado</h1>
+                            <h1 class="m-0">Panel Principal</h1>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                                                     th:text="${#temporals.format(evidencia.fechaRegistro, 'dd/MM/yyyy HH:mm')}">
                                                     Fecha</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-info btn-ver-foto" 
+                                                    <button type="button" class="btn btn-sm btn-info btn-ver-foto"
                                                         th:data-url="@{|/empleado/ver-foto?matricula=${evidencia.estudiante.idUsuario}&id_evento=${evidencia.evento.idEvento}|}">
                                                         <i class="fas fa-eye"></i> Ver Foto
                                                     </button>
@@ -100,7 +100,8 @@
         </div>
 
         <!-- Modal Ver Foto -->
-        <div class="modal fade" id="fotoModal" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel" aria-hidden="true">
+        <div class="modal fade" id="fotoModal" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -111,7 +112,8 @@
                     </div>
                     <div class="modal-body text-center">
                         <div id="fotoModalError" class="alert alert-danger" style="display:none;"></div>
-                        <img id="fotoModalImg" src="" alt="Evidencia" class="img-fluid" style="display:none; max-height: 70vh;" />
+                        <img id="fotoModalImg" src="" alt="Evidencia" class="img-fluid"
+                            style="display:none; max-height: 70vh;" />
                     </div>
                 </div>
             </div>
@@ -124,23 +126,23 @@
     <div th:replace="~{layout :: scripts}"></div>
 
     <script>
-        $(document).ready(function() {
-            $('.btn-ver-foto').click(function() {
+        $(document).ready(function () {
+            $('.btn-ver-foto').click(function () {
                 var url = $(this).data('url');
-                
+
                 // Limpiar modal
                 $('#fotoModalError').hide();
                 $('#fotoModalImg').hide().attr('src', '');
-                
+
                 // Realizar peticion
-                $.get(url, function(data) {
+                $.get(url, function (data) {
                     if (data.success) {
                         $('#fotoModalImg').attr('src', data.url).show();
                     } else {
                         $('#fotoModalError').text(data.message).show();
                     }
                     $('#fotoModal').modal('show');
-                }).fail(function() {
+                }).fail(function () {
                     $('#fotoModalError').text('Error de conexión con el servidor.').show();
                     $('#fotoModal').modal('show');
                 });
