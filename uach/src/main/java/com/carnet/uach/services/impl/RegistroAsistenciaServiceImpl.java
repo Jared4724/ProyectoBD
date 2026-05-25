@@ -102,4 +102,12 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
     public java.util.List<RegistroAsistencia> obtenerRegistrosPorEstudiante(Long matricula) {
         return registroAsistenciaRepository.findByEstudiante_IdUsuario(matricula);
     }
+
+    @Override
+    public RegistroAsistencia obtenerRegistroPorId(Long matricula, Long idEvento) {
+        RegistroAsistenciaId id = new RegistroAsistenciaId();
+        id.setMatricula(matricula);
+        id.setIdEvento(idEvento);
+        return registroAsistenciaRepository.findById(id).orElse(null);
+    }
 }

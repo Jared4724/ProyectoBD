@@ -25,4 +25,6 @@ public interface RegistroAsistenciaService {
     java.util.List<com.carnet.uach.models.RegistroAsistencia> obtenerRegistrosConfirmados(Long matricula);
 
     java.util.List<com.carnet.uach.models.RegistroAsistencia> obtenerRegistrosPorEstudiante(Long matricula);
+
+    com.carnet.uach.models.RegistroAsistencia obtenerRegistroPorId(Long matricula, Long idEvento);
 }
