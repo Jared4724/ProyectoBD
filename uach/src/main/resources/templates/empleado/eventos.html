@@ -45,7 +45,8 @@
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Fecha</th>
+                                            <th>Fecha Evento</th>
+                                            <th>Fecha Fin</th>
                                             <th>Ubicación</th>
                                             <th>Puntos</th>
                                             <th>Categoría</th>
@@ -55,7 +56,8 @@
                                     <tbody>
                                         <tr th:each="evento : ${eventos}">
                                             <td th:text="${evento.nombreEvento}"></td>
-                                            <td th:text="${#temporals.format(evento.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${#temporals.format(evento.fechaInicio, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${evento.fechaFin != null ? #temporals.format(evento.fechaFin, 'dd/MM/yyyy HH:mm') : 'Permanente'}"></td>
                                             <td th:text="${evento.ubicacion}"></td>
                                             <td th:text="${evento.puntos}"></td>
                                             <td th:text="${evento.categoria.nombreCategoria}"></td>
@@ -69,7 +71,7 @@
                                             </td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(eventos)}">
-                                            <td colspan="6" class="text-center">No hay eventos registrados.</td>
+                                            <td colspan="7" class="text-center">No hay eventos registrados.</td>
                                         </tr>
                                     </tbody>
                                 </table>

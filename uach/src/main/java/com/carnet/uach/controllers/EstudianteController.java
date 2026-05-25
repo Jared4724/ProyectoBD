@@ -3,6 +3,8 @@ package com.carnet.uach.controllers;
 import com.carnet.uach.services.EventoService;
 import com.carnet.uach.services.RegistroAsistenciaService;
 import java.util.List;
+import java.util.stream.Collectors;
+import com.carnet.uach.models.Evento;
 import com.carnet.uach.models.RegistroAsistencia;
 import com.carnet.uach.repositories.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
@@ -120,8 +122,17 @@ public class EstudianteController {
             mes = java.time.LocalDate.now().getMonthValue();
         }
         
+        List<Evento> todosDisponibles = eventoService.filtrarEventosDisponibles(mes, idCategoria);
+        List<Evento> eventosNormales = todosDisponibles.stream()
+                .filter(e -> e.getFechaFin() != null)
+                .collect(Collectors.toList());
+        List<Evento> eventosPermanentes = todosDisponibles.stream()
+                .filter(e -> e.getFechaFin() == null)
+                .collect(Collectors.toList());
+        
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        model.addAttribute("eventos", eventoService.filtrarEventosDisponibles(mes, idCategoria));
+        model.addAttribute("eventos", eventosNormales);
+        model.addAttribute("eventosPermanentes", eventosPermanentes);
         model.addAttribute("categorias", categoriaRepository.findAll());
         model.addAttribute("mesSeleccionado", mes);
         model.addAttribute("categoriaSeleccionada", idCategoria);

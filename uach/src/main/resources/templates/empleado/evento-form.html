@@ -49,10 +49,16 @@
                                         <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3" placeholder="Descripción breve del evento"></textarea>
                                     </div>
                                     
-                                    <div class="form-group">
-                                        <label for="fecha">Fecha y Hora</label>
-                                        <!-- Se utiliza datetime-local para vincular correctamente con LocalDateTime -->
-                                        <input type="datetime-local" class="form-control" id="fecha" th:field="*{fecha}" required>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="fechaInicio">Fecha y Hora de Inicio</label>
+                                            <input type="datetime-local" class="form-control" id="fechaInicio" th:field="*{fechaInicio}" required>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label for="fechaFin">Fecha y Hora de Fin (Opcional)</label>
+                                            <input type="datetime-local" class="form-control" id="fechaFin" th:field="*{fechaFin}">
+                                            <small class="form-text text-muted">La fecha límite de registro será 1 mes después. Déjalo en blanco si es permanente.</small>
+                                        </div>
                                     </div>
                                     
                                     <div class="form-group">

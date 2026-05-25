@@ -20,8 +20,11 @@ public class Evento {
     @Column(length = 1000)
     private String descripcion;
 
-    @Column(nullable = false)
-    private LocalDateTime fecha;
+    @Column(name = "fecha_inicio", nullable = false)
+    private LocalDateTime fechaInicio;
+
+    @Column(name = "fecha_fin")
+    private LocalDateTime fechaFin;
 
     @Column(nullable = false, length = 255)
     private String ubicacion;
@@ -36,4 +39,9 @@ public class Evento {
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false) // Organizador
     private Empleado organizador;
+
+    @Transient
+    public LocalDateTime getFechaLimite() {
+        return fechaFin != null ? fechaFin.plusMonths(1) : null;
+    }
 }
