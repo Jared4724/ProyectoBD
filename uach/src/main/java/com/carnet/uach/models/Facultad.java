@@ -9,9 +9,8 @@ import lombok.Data;
 public class Facultad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_facultad")
-    private Long idFacultad;
+    @Column(name = "id_facultad", length = 10)
+    private String idFacultad;
 
     @Column(name = "nombre_facultad", nullable = false, length = 150)
     private String nombreFacultad;
