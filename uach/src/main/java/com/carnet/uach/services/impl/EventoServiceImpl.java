@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class EventoServiceImpl implements EventoService {
@@ -49,15 +49,6 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public List<Evento> listarEventosDisponibles() {
         return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1));
-    }
-
-    @Override
-    public List<Evento> filtrarEventosDisponibles(Integer mes, String idCategoria) {
-        return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1)).stream()
-                .filter(e -> mes == null || e.getFechaFin() == null || e.getFechaInicio().getMonthValue() == mes)
-                .filter(e -> idCategoria == null || idCategoria.isEmpty() || 
-                             (e.getCategoria() != null && e.getCategoria().getIdCategoria().equals(idCategoria)))
-                .collect(Collectors.toList());
     }
 
 }
