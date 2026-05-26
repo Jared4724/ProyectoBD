@@ -64,22 +64,4 @@ public class EventoController {
         return "redirect:/empleado/eventos";
     }
 
-    /**
-     * Muestra el formulario para editar un evento existente.
-     */
-    @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
-        model.addAttribute("evento", eventoService.obtenerPorId(id));
-        model.addAttribute("categorias", categoriaRepository.findAll());
-        return "empleado/evento-form";
-    }
-
-    /**
-     * Elimina un evento por su ID.
-     */
-    @GetMapping("/eliminar/{id}")
-    public String eliminarEvento(@PathVariable Long id) {
-        eventoService.eliminarEvento(id);
-        return "redirect:/empleado/eventos";
-    }
 }

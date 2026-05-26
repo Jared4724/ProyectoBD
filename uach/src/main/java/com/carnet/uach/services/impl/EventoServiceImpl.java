@@ -47,11 +47,6 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
-    public void eliminarEvento(Long id) {
-        eventoRepository.deleteById(id);
-    }
-
-    @Override
     public List<Evento> listarEventosDisponibles() {
         return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1));
     }

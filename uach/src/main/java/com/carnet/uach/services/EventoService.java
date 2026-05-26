@@ -31,12 +31,6 @@ public interface EventoService {
     void guardarEvento(Evento evento, Long idEmpleadoOrganizador);
     
     /**
-     * Elimina un evento por su ID.
-     * @param id Identificador del evento.
-     */
-    void eliminarEvento(Long id);
-    
-    /**
      * Obtiene la lista de eventos disponibles (con fecha futura).
      * @return Lista de eventos próximos.
      */
