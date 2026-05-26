@@ -59,7 +59,7 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public List<Evento> filtrarEventosDisponibles(Integer mes, String idCategoria) {
         return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1)).stream()
-                .filter(e -> mes == null || e.getFechaInicio().getMonthValue() == mes)
+                .filter(e -> mes == null || e.getFechaFin() == null || e.getFechaInicio().getMonthValue() == mes)
                 .filter(e -> idCategoria == null || idCategoria.isEmpty() || 
                              (e.getCategoria() != null && e.getCategoria().getIdCategoria().equals(idCategoria)))
                 .collect(Collectors.toList());

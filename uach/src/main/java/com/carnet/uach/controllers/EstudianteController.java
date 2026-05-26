@@ -66,18 +66,26 @@ public class EstudianteController {
     }
 
     @GetMapping("/subir-evidencia")
-    public String subirEvidencia(HttpSession session, Model model) {
+    public String subirEvidencia(@RequestParam(required = false) Integer mes,
+                                 @RequestParam(required = false) String idCategoria,
+                                 @RequestParam(required = false) Boolean filter,
+                                 HttpSession session, Model model) {
         Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
         
-        // Se listan los eventos cuya fecha límite aún no ha pasado
-        List<com.carnet.uach.models.Evento> disponibles = eventoService.listarEventosDisponibles();
+        if (mes == null && (filter == null || !filter)) {
+            mes = java.time.LocalDate.now().getMonthValue();
+        }
         
-        // Filtramos los eventos para los que el alumno ya mandó evidencia (pendiente o aprobada)
+        List<com.carnet.uach.models.Evento> disponibles = eventoService.filtrarEventosDisponibles(mes, idCategoria);
+        
         List<RegistroAsistencia> enviados = registroAsistenciaService.obtenerRegistrosPorEstudiante(matricula);
         disponibles.removeIf(evento -> enviados.stream().anyMatch(r -> r.getEvento().getIdEvento().equals(evento.getIdEvento())));
         
         model.addAttribute("eventos", disponibles);
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        model.addAttribute("mesSeleccionado", mes);
+        model.addAttribute("categoriaSeleccionada", idCategoria);
         return "estudiante/subir-evidencia";
     }
 

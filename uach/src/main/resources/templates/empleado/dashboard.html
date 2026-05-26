@@ -34,6 +34,39 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Bienvenido al Panel de Administración</h3>
                                 </div>
+                                <div class="card-body bg-light border-bottom">
+                                    <form th:action="@{/dashboard/empleado}" method="get" class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label for="mes"><i class="far fa-calendar-alt"></i> Mes del Evento</label>
+                                            <select class="form-control" name="mes" id="mes" onchange="this.form.submit()">
+                                                <option value="" th:selected="${mesSeleccionado == null}">Todos los meses</option>
+                                                <option value="1" th:selected="${mesSeleccionado == 1}">Enero</option>
+                                                <option value="2" th:selected="${mesSeleccionado == 2}">Febrero</option>
+                                                <option value="3" th:selected="${mesSeleccionado == 3}">Marzo</option>
+                                                <option value="4" th:selected="${mesSeleccionado == 4}">Abril</option>
+                                                <option value="5" th:selected="${mesSeleccionado == 5}">Mayo</option>
+                                                <option value="6" th:selected="${mesSeleccionado == 6}">Junio</option>
+                                                <option value="7" th:selected="${mesSeleccionado == 7}">Julio</option>
+                                                <option value="8" th:selected="${mesSeleccionado == 8}">Agosto</option>
+                                                <option value="9" th:selected="${mesSeleccionado == 9}">Septiembre</option>
+                                                <option value="10" th:selected="${mesSeleccionado == 10}">Octubre</option>
+                                                <option value="11" th:selected="${mesSeleccionado == 11}">Noviembre</option>
+                                                <option value="12" th:selected="${mesSeleccionado == 12}">Diciembre</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label for="idCategoria"><i class="fas fa-tags"></i> Categoría</label>
+                                            <select class="form-control" name="idCategoria" id="idCategoria" onchange="this.form.submit()">
+                                                <option value="">Todas las categorías</option>
+                                                <option th:each="cat : ${categorias}" 
+                                                        th:value="${cat.idCategoria}" 
+                                                        th:text="${cat.nombreCategoria}"
+                                                        th:selected="${categoriaSeleccionada == cat.idCategoria}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="card-body table-responsive p-0">
                                     <table class="table table-hover text-nowrap">
                                         <thead>

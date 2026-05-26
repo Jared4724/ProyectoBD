@@ -21,8 +21,21 @@ public class EventoController {
      * Muestra la lista de todos los eventos.
      */
     @GetMapping({"", "/"})
-    public String listarEventos(Model model) {
-        model.addAttribute("eventos", eventoService.listarTodos());
+    public String listarEventos(@RequestParam(required = false) Integer mes,
+                                @RequestParam(required = false) String idCategoria,
+                                Model model) {
+        java.util.List<Evento> eventos = eventoService.listarTodos();
+        if (mes != null || (idCategoria != null && !idCategoria.isEmpty())) {
+            eventos = eventos.stream()
+                .filter(e -> mes == null || e.getFechaFin() == null || e.getFechaInicio().getMonthValue() == mes)
+                .filter(e -> idCategoria == null || idCategoria.isEmpty() || 
+                             (e.getCategoria() != null && e.getCategoria().getIdCategoria().equals(idCategoria)))
+                .collect(java.util.stream.Collectors.toList());
+        }
+        model.addAttribute("eventos", eventos);
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        model.addAttribute("mesSeleccionado", mes);
+        model.addAttribute("categoriaSeleccionada", idCategoria);
         return "empleado/eventos";
     }
 

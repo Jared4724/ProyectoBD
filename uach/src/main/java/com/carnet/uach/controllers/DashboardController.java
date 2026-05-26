@@ -1,6 +1,7 @@
 package com.carnet.uach.controllers;
 
 import com.carnet.uach.services.RegistroAsistenciaService;
+import com.carnet.uach.repositories.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DashboardController {
 
     private final RegistroAsistenciaService registroAsistenciaService;
+    private final CategoriaRepository categoriaRepository;
 
     @GetMapping("/dashboard/empleado")
-    public String dashboardEmpleado(HttpSession session, Model model) {
+    public String dashboardEmpleado(@RequestParam(required = false) Integer mes,
+                                    @RequestParam(required = false) String idCategoria,
+                                    HttpSession session, Model model) {
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        model.addAttribute("evidencias", registroAsistenciaService.listarEvidenciasPendientes());
+        
+        java.util.List<com.carnet.uach.models.RegistroAsistencia> evidencias = registroAsistenciaService.listarEvidenciasPendientes();
+        if (mes != null || (idCategoria != null && !idCategoria.isEmpty())) {
+            evidencias = registroAsistenciaService.filtrarEvidenciasPendientes(mes, idCategoria);
+        }
+        
+        model.addAttribute("evidencias", evidencias);
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        model.addAttribute("mesSeleccionado", mes);
+        model.addAttribute("categoriaSeleccionada", idCategoria);
+        
         return "empleado/dashboard";
     }
 
