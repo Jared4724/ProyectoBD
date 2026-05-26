@@ -72,7 +72,7 @@
                                             <td th:text="${evento.nombreEvento}">Feria de Ciencias</td>
                                             <td th:text="${evento.categoria != null ? evento.categoria.nombreCategoria : 'N/A'}">Científico</td>
                                             <td th:text="${#temporals.format(evento.fechaInicio, 'dd-MMM-yyyy')}">25-May-2026</td>
-                                            <td><span class="badge badge-success">Permanente</span></td>
+                                            <td>- - - -  - - - - - - - - -</td>
                                             <td th:text="${evento.ubicacion}">Facultad de Ingeniería</td>
                                             <td th:text="${evento.puntos}">2</td>
                                         </tr>
