@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.carnet.uach.models.Evento;
 import com.carnet.uach.models.RegistroAsistencia;
-import com.carnet.uach.repositories.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ public class EstudianteController {
 
     private final EventoService eventoService;
     private final RegistroAsistenciaService registroAsistenciaService;
-    private final CategoriaRepository categoriaRepository;
 
     @GetMapping("/eventos")
     public String dashboardEstudiante(HttpSession session, Model model) {
@@ -77,7 +75,8 @@ public class EstudianteController {
         Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
 
-        List<com.carnet.uach.models.Evento> disponibles = new java.util.ArrayList<>(eventoService.listarEventosDisponibles());
+        List<com.carnet.uach.models.Evento> disponibles = new java.util.ArrayList<>(
+                eventoService.listarEventosDisponibles());
 
         List<RegistroAsistencia> enviados = registroAsistenciaService.obtenerRegistrosPorEstudiante(matricula);
         disponibles.removeIf(
