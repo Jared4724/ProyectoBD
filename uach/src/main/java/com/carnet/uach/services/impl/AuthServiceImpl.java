@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Usuario autenticarUsuario(String identificador, String contrasena) {
         Optional<? extends Usuario> usuarioOpt = Optional.empty();
-        
+
         identificador = identificador.trim().toLowerCase();
 
         if (identificador.contains("@")) {
@@ -46,10 +46,9 @@ public class AuthServiceImpl implements AuthService {
                 // Formato inválido
             }
         }
-        
+
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            // TODO: Implementar encriptación de contraseñas con BCrypt (ej. passwordEncoder.matches(...))
             if (usuario.getContrasena().equals(contrasena)) {
                 return usuario;
             }
