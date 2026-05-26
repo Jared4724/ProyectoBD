@@ -114,11 +114,6 @@ public class EstudianteController {
         return "redirect:/estudiante/subir-evidencia";
     }
 
-    @GetMapping("/encuestas")
-    public String encuestas(HttpSession session, Model model) {
-        model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        return "estudiante/encuestas";
-    }
 
     @GetMapping("/proximos-eventos")
     public String proximosEventos(@RequestParam(required = false) Integer mes,
