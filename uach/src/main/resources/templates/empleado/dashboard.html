@@ -82,8 +82,8 @@
                                         <tbody>
                                             <tr th:each="evidencia : ${evidencias}">
                                                 <td
-                                                    th:text="${evidencia.estudiante.idUsuario} + ' - ' + ${evidencia.estudiante.nombre} + ' ' + ${evidencia.estudiante.apellido}">
-                                                    Matricula - Nombre</td>
+                                                    th:text="${evidencia.estudiante.idUsuario}">
+                                                    Matricula</td>
                                                 <td th:text="${evidencia.evento.nombreEvento}">Nombre del Evento</td>
                                                 <td th:title="${evidencia.descripcion != null ? evidencia.descripcion : ''}"
                                                     th:text="${evidencia.descripcion != null ? (#strings.length(evidencia.descripcion) > 20 ? #strings.substring(evidencia.descripcion,0,20) + '...' : evidencia.descripcion) : 'Sin descripción'}">
