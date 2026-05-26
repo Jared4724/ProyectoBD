@@ -71,16 +71,6 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
     }
 
     @Override
-    public java.util.List<RegistroAsistencia> filtrarEvidenciasPendientes(Integer mes, String idCategoria) {
-        return registroAsistenciaRepository.findByAsistenciaConfirmadaFalse().stream()
-                .filter(r -> r.getEvento() != null)
-                .filter(r -> mes == null || r.getEvento().getFechaFin() == null || r.getEvento().getFechaInicio().getMonthValue() == mes)
-                .filter(r -> idCategoria == null || idCategoria.isEmpty() || 
-                             (r.getEvento().getCategoria() != null && r.getEvento().getCategoria().getIdCategoria().equals(idCategoria)))
-                .collect(java.util.stream.Collectors.toList());
-    }
-
-    @Override
     public void aprobarEvidencia(Long matricula, Long idEvento) {
         RegistroAsistenciaId id = new RegistroAsistenciaId();
         id.setMatricula(matricula);

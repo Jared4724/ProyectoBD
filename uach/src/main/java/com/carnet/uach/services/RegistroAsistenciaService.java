@@ -17,8 +17,6 @@ public interface RegistroAsistenciaService {
     void guardarEvidencia(Long matricula, Long idEvento, String descripcion, MultipartFile archivo) throws IOException;
 
     java.util.List<com.carnet.uach.models.RegistroAsistencia> listarEvidenciasPendientes();
-    
-    java.util.List<com.carnet.uach.models.RegistroAsistencia> filtrarEvidenciasPendientes(Integer mes, String idCategoria);
 
     void aprobarEvidencia(Long matricula, Long idEvento);
 
