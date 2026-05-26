@@ -23,7 +23,7 @@ public class AuthController {
         if (session.getAttribute("usuarioId") != null) {
             String rol = (String) session.getAttribute("rol");
             if ("ESTUDIANTE".equals(rol)) return "redirect:/estudiante/eventos";
-            if ("EMPLEADO".equals(rol)) return "redirect:/dashboard/empleado";
+            if ("EMPLEADO".equals(rol)) return "redirect:/empleado/validaciones";
         }
         return "login";
     }
@@ -48,7 +48,7 @@ public class AuthController {
                 return "redirect:/estudiante/eventos";
             } else if (usuario instanceof Empleado) {
                 session.setAttribute("rol", "EMPLEADO");
-                return "redirect:/dashboard/empleado";
+                return "redirect:/empleado/validaciones";
             }
         }
 

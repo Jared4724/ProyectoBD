@@ -1,7 +1,6 @@
 package com.carnet.uach.controllers;
 
 import com.carnet.uach.services.RegistroAsistenciaService;
-import com.carnet.uach.repositories.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,42 +11,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class DashboardController {
+public class ValidacionController {
 
     private final RegistroAsistenciaService registroAsistenciaService;
-    private final CategoriaRepository categoriaRepository;
 
-    @GetMapping("/dashboard/empleado")
-    public String dashboardEmpleado(@RequestParam(required = false) Integer mes,
-                                    @RequestParam(required = false) String idCategoria,
-                                    HttpSession session, Model model) {
+    @GetMapping("/empleado/validaciones")
+    public String dashboardEmpleado(HttpSession session, Model model) {
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
         
         java.util.List<com.carnet.uach.models.RegistroAsistencia> evidencias = registroAsistenciaService.listarEvidenciasPendientes();
-        if (mes != null || (idCategoria != null && !idCategoria.isEmpty())) {
-            evidencias = registroAsistenciaService.filtrarEvidenciasPendientes(mes, idCategoria);
-        }
         
         model.addAttribute("evidencias", evidencias);
-        model.addAttribute("categorias", categoriaRepository.findAll());
-        model.addAttribute("mesSeleccionado", mes);
-        model.addAttribute("categoriaSeleccionada", idCategoria);
         
-        return "empleado/dashboard";
+        return "empleado/validaciones";
     }
 
     @PostMapping("/empleado/aprobar-evidencia")
     public String aprobarEvidencia(@RequestParam("matricula") Long matricula,
             @RequestParam("id_evento") Long idEvento) {
         registroAsistenciaService.aprobarEvidencia(matricula, idEvento);
-        return "redirect:/dashboard/empleado";
+        return "redirect:/empleado/validaciones";
     }
 
     @PostMapping("/empleado/rechazar-evidencia")
     public String rechazarEvidencia(@RequestParam("matricula") Long matricula,
             @RequestParam("id_evento") Long idEvento) {
         registroAsistenciaService.rechazarEvidencia(matricula, idEvento);
-        return "redirect:/dashboard/empleado";
+        return "redirect:/empleado/validaciones";
     }
 
     @GetMapping("/empleado/ver-foto")

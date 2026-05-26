@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{layout :: head('Panel Empleado')}">
-    <title>Panel Empleado</title>
+<head th:replace="~{layout :: head('Validación de Evidencias')}">
+    <title>Validación de Evidencias</title>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -12,7 +12,7 @@
         <nav th:replace="~{layout :: navbar}"></nav>
 
         <!-- Sidebar -->
-        <aside th:replace="~{layout :: sidebar-empleado('dashboard')}"></aside>
+        <aside th:replace="~{layout :: sidebar-empleado('validaciones')}"></aside>
 
         <!-- Content Wrapper -->
         <div class="content-wrapper">
@@ -30,7 +30,7 @@
                         <div class="col-12">
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
-                                    <h3 class="card-title">Panel de Administración</h3>
+                                    <h3 class="card-title">Pendientes de Validación</h3>
                                 </div>
 
                                 <div class="card-body table-responsive p-0">
