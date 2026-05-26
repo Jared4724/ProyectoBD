@@ -31,29 +31,36 @@ public class EstudianteController {
     public String dashboardEstudiante(HttpSession session, Model model) {
         Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        
+
         List<RegistroAsistencia> confirmados = registroAsistenciaService.obtenerRegistrosConfirmados(matricula);
-        
+
         int puntosArtistica = 0;
         int puntosCientifica = 0;
         int puntosDeportiva = 0;
         int puntosHerramientas = 0;
         int puntosSalud = 0;
         int puntosComunidad = 0;
-        
+
         for (RegistroAsistencia r : confirmados) {
             if (r.getEvento() != null && r.getEvento().getCategoria() != null) {
-                String cat = r.getEvento().getCategoria().getNombreCategoria().toUpperCase();
-                int pts = r.getEvento().getPuntos();
-                if (cat.contains("ARTISTICA") || cat.contains("CULTURAL")) puntosArtistica += pts;
-                else if (cat.contains("CIENTIFICO") || cat.contains("FILOSOFICA")) puntosCientifica += pts;
-                else if (cat.contains("DEPORTIV")) puntosDeportiva += pts;
-                else if (cat.contains("HERRAMIENTAS")) puntosHerramientas += pts;
-                else if (cat.contains("SALUD")) puntosSalud += pts;
-                else if (cat.contains("COMUNIDAD")) puntosComunidad += pts;
+                String idCat = r.getEvento().getCategoria().getIdCategoria().toUpperCase();
+                int pts = r.getEvento().getPuntos() != null ? r.getEvento().getPuntos() : 0;
+
+                if (idCat.equals("CULT"))
+                    puntosArtistica += pts;
+                else if (idCat.equals("CIEN"))
+                    puntosCientifica += pts;
+                else if (idCat.equals("DEP"))
+                    puntosDeportiva += pts;
+                else if (idCat.equals("HERR"))
+                    puntosHerramientas += pts;
+                else if (idCat.equals("SAL"))
+                    puntosSalud += pts;
+                else if (idCat.equals("COM"))
+                    puntosComunidad += pts;
             }
         }
-        
+
         model.addAttribute("puntosArtistica", Math.min(puntosArtistica, 6));
         model.addAttribute("puntosCientifica", Math.min(puntosCientifica, 6));
         model.addAttribute("puntosDeportiva", Math.min(puntosDeportiva, 6));
@@ -61,27 +68,28 @@ public class EstudianteController {
         model.addAttribute("puntosSalud", Math.min(puntosSalud, 6));
         model.addAttribute("puntosComunidad", Math.min(puntosComunidad, 6));
         model.addAttribute("historial", confirmados);
-        
+
         return "estudiante/eventos";
     }
 
     @GetMapping("/subir-evidencia")
     public String subirEvidencia(@RequestParam(required = false) Integer mes,
-                                 @RequestParam(required = false) String idCategoria,
-                                 @RequestParam(required = false) Boolean filter,
-                                 HttpSession session, Model model) {
+            @RequestParam(required = false) String idCategoria,
+            @RequestParam(required = false) Boolean filter,
+            HttpSession session, Model model) {
         Long matricula = (Long) session.getAttribute("usuarioId");
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
-        
+
         if (mes == null && (filter == null || !filter)) {
             mes = java.time.LocalDate.now().getMonthValue();
         }
-        
+
         List<com.carnet.uach.models.Evento> disponibles = eventoService.filtrarEventosDisponibles(mes, idCategoria);
-        
+
         List<RegistroAsistencia> enviados = registroAsistenciaService.obtenerRegistrosPorEstudiante(matricula);
-        disponibles.removeIf(evento -> enviados.stream().anyMatch(r -> r.getEvento().getIdEvento().equals(evento.getIdEvento())));
-        
+        disponibles.removeIf(
+                evento -> enviados.stream().anyMatch(r -> r.getEvento().getIdEvento().equals(evento.getIdEvento())));
+
         model.addAttribute("eventos", disponibles);
         model.addAttribute("categorias", categoriaRepository.findAll());
         model.addAttribute("mesSeleccionado", mes);
@@ -96,12 +104,13 @@ public class EstudianteController {
             @RequestParam("evidencia_file") MultipartFile archivo,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
-        
+
         if (descripcion == null || descripcion.trim().isEmpty() || archivo == null || archivo.isEmpty()) {
-            redirectAttributes.addFlashAttribute("mensajeError", "Todos los campos son obligatorios (Descripción y Evidencia).");
+            redirectAttributes.addFlashAttribute("mensajeError",
+                    "Todos los campos son obligatorios (Descripción y Evidencia).");
             return "redirect:/estudiante/subir-evidencia";
         }
-        
+
         Long matricula = (Long) session.getAttribute("usuarioId");
 
         try {
@@ -114,17 +123,17 @@ public class EstudianteController {
         return "redirect:/estudiante/subir-evidencia";
     }
 
-
     @GetMapping("/proximos-eventos")
     public String proximosEventos(@RequestParam(required = false) Integer mes,
-                                  @RequestParam(required = false) String idCategoria,
-                                  @RequestParam(required = false) Boolean filter,
-                                  HttpSession session, Model model) {
-        // Si no hay filtro explícito y es la primera vez que entra, usamos el mes actual.
+            @RequestParam(required = false) String idCategoria,
+            @RequestParam(required = false) Boolean filter,
+            HttpSession session, Model model) {
+        // Si no hay filtro explícito y es la primera vez que entra, usamos el mes
+        // actual.
         if (mes == null && (filter == null || !filter)) {
             mes = java.time.LocalDate.now().getMonthValue();
         }
-        
+
         List<Evento> todosDisponibles = eventoService.filtrarEventosDisponibles(mes, idCategoria);
         List<Evento> eventosNormales = todosDisponibles.stream()
                 .filter(e -> e.getFechaFin() != null)
@@ -132,7 +141,7 @@ public class EstudianteController {
         List<Evento> eventosPermanentes = todosDisponibles.stream()
                 .filter(e -> e.getFechaFin() == null)
                 .collect(Collectors.toList());
-        
+
         model.addAttribute("usuarioNombre", session.getAttribute("usuarioNombre"));
         model.addAttribute("eventos", eventosNormales);
         model.addAttribute("eventosPermanentes", eventosPermanentes);
