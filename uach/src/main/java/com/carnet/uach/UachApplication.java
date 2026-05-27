@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
+// Habilita el soporte general de caché en Spring (que usará Redis por la configuración de properties)
 @EnableCaching
 public class UachApplication {
 

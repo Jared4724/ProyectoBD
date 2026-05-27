@@ -31,6 +31,9 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
+    // REDIS: Cuando se crea o modifica un evento, esta anotación le dice a Redis
+    // que borre (Evict) toda la caché almacenada bajo la clave "eventosDisponibles".
+    // Así evitamos mostrar datos desactualizados a los estudiantes.
     @CacheEvict(value = "eventosDisponibles", allEntries = true)
     public void guardarEvento(Evento evento, Long idEmpleadoOrganizador) {
         // Busca la Categoría en su repositorio para asignarla al evento
@@ -50,6 +53,9 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
+    // REDIS: La primera vez que alguien consulte los eventos, Spring irá a Oracle,
+    // pero guardará el resultado en Redis bajo la clave "eventosDisponibles".
+    // Las siguientes veces, devolverá los eventos desde Redis sin tocar la base de datos Oracle.
     @Cacheable(value = "eventosDisponibles")
     public List<Evento> listarEventosDisponibles() {
         return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1));
