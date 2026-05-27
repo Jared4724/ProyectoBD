@@ -9,6 +9,7 @@ import com.carnet.uach.services.RegistroAsistenciaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService {
 
     private final RegistroAsistenciaRepository registroAsistenciaRepository;
+    private final RabbitTemplate rabbitTemplate;
     private final String UPLOAD_DIR = "uploads/evidencias/";
 
     @Override
@@ -89,8 +91,19 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
         id.setMatricula(matricula);
         id.setIdEvento(idEvento);
         
-        // Se elimina el registro para que el estudiante pueda volver a intentarlo
-        registroAsistenciaRepository.deleteById(id);
+        RegistroAsistencia registro = registroAsistenciaRepository.findById(id).orElse(null);
+        if (registro != null && registro.getEvidencia() != null) {
+            String rutaEvidencia = registro.getEvidencia();
+            
+            // Se elimina el registro para que el estudiante pueda volver a intentarlo
+            registroAsistenciaRepository.deleteById(id);
+            
+            // Enviar mensaje a RabbitMQ para borrado físico asíncrono en Apache Camel
+            rabbitTemplate.convertAndSend("evidencias.exchange", "evidencia.rechazada", rutaEvidencia);
+        } else {
+            // Se elimina el registro directamente
+            registroAsistenciaRepository.deleteById(id);
+        }
     }
 
     @Override
