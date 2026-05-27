@@ -7,6 +7,8 @@ import com.carnet.uach.repositories.CategoriaRepository;
 import com.carnet.uach.repositories.EventoRepository;
 import com.carnet.uach.services.EventoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
+    @CacheEvict(value = "eventosDisponibles", allEntries = true)
     public void guardarEvento(Evento evento, Long idEmpleadoOrganizador) {
         // Busca la Categoría en su repositorio para asignarla al evento
         if (evento.getCategoria() != null && evento.getCategoria().getIdCategoria() != null) {
@@ -47,6 +50,7 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
+    @Cacheable(value = "eventosDisponibles")
     public List<Evento> listarEventosDisponibles() {
         return eventoRepository.findDisponibles(java.time.LocalDateTime.now().minusMonths(1));
     }
