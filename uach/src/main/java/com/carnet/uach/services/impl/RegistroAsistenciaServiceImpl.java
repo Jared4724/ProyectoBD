@@ -7,6 +7,7 @@ import com.carnet.uach.models.RegistroAsistenciaId;
 import com.carnet.uach.repositories.RegistroAsistenciaRepository;
 import com.carnet.uach.services.RegistroAsistenciaService;
 import lombok.RequiredArgsConstructor;
+import org.apache.camel.ProducerTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,10 +24,12 @@ import java.util.UUID;
 public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService {
 
     private final RegistroAsistenciaRepository registroAsistenciaRepository;
+    private final ProducerTemplate producerTemplate;
     private final String UPLOAD_DIR = "uploads/evidencias/";
 
     @Override
-    public void guardarEvidencia(Long matricula, Long idEvento, String descripcion, MultipartFile archivo) throws IOException {
+    public void guardarEvidencia(Long matricula, Long idEvento, String descripcion, MultipartFile archivo)
+            throws IOException {
         // Crear carpeta de subidas si no existe
         Path uploadPath = Paths.get(UPLOAD_DIR);
         if (!Files.exists(uploadPath)) {
@@ -43,7 +46,7 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
 
         // Preparar la entidad para guardar en la BD
         RegistroAsistencia registro = new RegistroAsistencia();
-        
+
         RegistroAsistenciaId id = new RegistroAsistenciaId();
         id.setIdEvento(idEvento);
         id.setMatricula(matricula);
@@ -88,8 +91,20 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
         RegistroAsistenciaId id = new RegistroAsistenciaId();
         id.setMatricula(matricula);
         id.setIdEvento(idEvento);
-        
-        // Se elimina el registro para que el estudiante pueda volver a intentarlo
+
+        // Obtenemos el registro para extraer la ruta de la evidencia antes de borrarlo
+        RegistroAsistencia registro = registroAsistenciaRepository.findById(id).orElse(null);
+        if (registro != null && registro.getEvidencia() != null) {
+            
+            // CAMEL + RABBITMQ:
+            // En lugar de hacer "Files.delete(ruta)" aquí mismo y arriesgarnos a trabar el servidor,
+            // usamos "ProducerTemplate" para enviarle el trabajo pesado a nuestra ruta de Camel (LimpiezaArchivosRoute).
+            // La pantalla del empleado cargará instantáneamente.
+            producerTemplate.sendBody("direct:borrarArchivo", registro.getEvidencia());
+        }
+
+        // Se elimina el registro de Oracle para que el estudiante pueda volver a
+        // intentarlo
         registroAsistenciaRepository.deleteById(id);
     }
 
