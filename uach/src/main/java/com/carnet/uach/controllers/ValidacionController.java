@@ -63,8 +63,12 @@ public class ValidacionController {
             return response;
         }
 
-        // Si existe, devolver la ruta real
-        String urlRuta = "/" + registro.getEvidencia().replace("\\", "/");
+        // Si existe, devolver la ruta real asegurándonos de limpiar el prefijo relativo
+        String evidenciaPath = registro.getEvidencia().replace("\\", "/");
+        if (evidenciaPath.startsWith("../")) {
+            evidenciaPath = evidenciaPath.substring(3);
+        }
+        String urlRuta = "/" + evidenciaPath;
         response.put("success", true);
         response.put("url", urlRuta);
         return response;

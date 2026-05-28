@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Expone la carpeta 'uploads' para que las fotos puedan ser accedidas vía web
-        String uploadPath = Paths.get("uploads").toAbsolutePath().toUri().toString();
+        String uploadPath = Paths.get("../uploads").toAbsolutePath().toUri().toString();
         
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(uploadPath);

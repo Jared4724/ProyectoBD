@@ -24,8 +24,17 @@ import java.util.UUID;
 public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService {
 
     private final RegistroAsistenciaRepository registroAsistenciaRepository;
+    
+    // ========================================================================================
+    // INTEGRACIÓN CON RABBITMQ (PRODUCTOR)
+    // ========================================================================================
+    // RabbitTemplate es la clase principal de Spring AMQP para enviar y recibir mensajes.
+    // Aquí la inyectamos (gracias a @RequiredArgsConstructor) para poder publicar mensajes
+    // hacia un exchange de RabbitMQ cuando se rechaza una evidencia.
+    // ========================================================================================
     private final RabbitTemplate rabbitTemplate;
-    private final String UPLOAD_DIR = "uploads/evidencias/";
+    
+    private final String UPLOAD_DIR = "../uploads/evidencias/";
 
     @Override
     public void guardarEvidencia(Long matricula, Long idEvento, String descripcion, MultipartFile archivo) throws IOException {
@@ -98,7 +107,18 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
             // Se elimina el registro para que el estudiante pueda volver a intentarlo
             registroAsistenciaRepository.deleteById(id);
             
-            // Enviar mensaje a RabbitMQ para borrado físico asíncrono en Apache Camel
+            // ========================================================================================
+            // ENVÍO DE MENSAJE A RABBITMQ
+            // ========================================================================================
+            // Se publica un mensaje en RabbitMQ para indicar que se debe borrar el archivo físico.
+            // Esto permite que la eliminación se haga de forma asíncrona mediante Apache Camel,
+            // liberando el hilo actual y mejorando el tiempo de respuesta de la petición HTTP.
+            // 
+            // Parámetros:
+            // 1. "evidencias.exchange": El nombre del Exchange en RabbitMQ.
+            // 2. "evidencia.rechazada": El Routing Key que determinará a qué cola va el mensaje.
+            // 3. rutaEvidencia: El cuerpo (payload) del mensaje, que es la ruta física del archivo.
+            // ========================================================================================
             rabbitTemplate.convertAndSend("evidencias.exchange", "evidencia.rechazada", rutaEvidencia);
         } else {
             // Se elimina el registro directamente

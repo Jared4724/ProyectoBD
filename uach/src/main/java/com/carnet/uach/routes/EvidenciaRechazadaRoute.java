@@ -16,15 +16,29 @@ public class EvidenciaRechazadaRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        // En Camel 4 con spring-rabbitmq el URI format es: 
-        // spring-rabbitmq:exchangeName?queues=queueName&routingKey=routingKey&autoDeclare=false
+        // ========================================================================================
+        // INTEGRACIÓN CAMEL + RABBITMQ (CONSUMIDOR)
+        // ========================================================================================
+        // Se utiliza el componente 'spring-rabbitmq' de Apache Camel para consumir mensajes 
+        // de forma asíncrona desde un exchange de RabbitMQ.
+        // 
+        // Parámetros de la URI:
+        // - exchangeName: 'evidencias.exchange' (El exchange al que nos conectamos).
+        // - queues: 'evidencias.rechazadas.queue' (La cola de donde Camel leerá los mensajes).
+        // - routingKey: 'evidencia.rechazada' (La clave de enrutamiento para filtrar mensajes).
+        // - autoDeclare=false: Indica que las colas/exchanges ya están declaradas en la configuración.
+        // ========================================================================================
         from("spring-rabbitmq:evidencias.exchange?queues=evidencias.rechazadas.queue&routingKey=evidencia.rechazada&autoDeclare=false")
-            .routeId("evidencia-rechazada-route")
+            .routeId("evidencia-rechazada-route") // Identificador único de la ruta en Camel
             .process(exchange -> {
+                // Aquí inicia el procesamiento del mensaje consumido.
+                // El cuerpo del mensaje (Body) contiene la ruta del archivo a eliminar, 
+                // que fue enviado como un String desde el servicio de RegistroAsistencia.
                 String rutaArchivo = exchange.getIn().getBody(String.class);
                 if (rutaArchivo != null && !rutaArchivo.trim().isEmpty()) {
                     try {
                         Path path = Paths.get(rutaArchivo);
+                        // Se realiza la eliminación física del archivo
                         boolean borrado = Files.deleteIfExists(path);
                         if (borrado) {
                             logger.info("Evidencia eliminada físicamente del disco de forma asíncrona: {}", rutaArchivo);
@@ -33,7 +47,7 @@ public class EvidenciaRechazadaRoute extends RouteBuilder {
                         }
                     } catch (Exception e) {
                         logger.error("Error al intentar borrar el archivo físico {}: {}", rutaArchivo, e.getMessage());
-                        // Dependiendo de la política de reintentos, se podría relanzar la excepción.
+                        // Dependiendo de la política de reintentos de Camel/RabbitMQ, se podría relanzar la excepción.
                     }
                 }
             });
