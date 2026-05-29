@@ -1,16 +1,5 @@
 package com.carnet.uach.services.impl;
 
-import com.carnet.uach.models.Estudiante;
-import com.carnet.uach.models.Evento;
-import com.carnet.uach.models.RegistroAsistencia;
-import com.carnet.uach.models.RegistroAsistenciaId;
-import com.carnet.uach.repositories.RegistroAsistenciaRepository;
-import com.carnet.uach.services.RegistroAsistenciaService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +7,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.apache.camel.ProducerTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.carnet.uach.models.Estudiante;
+import com.carnet.uach.models.Evento;
+import com.carnet.uach.models.RegistroAsistencia;
+import com.carnet.uach.models.RegistroAsistenciaId;
+import com.carnet.uach.repositories.RegistroAsistenciaRepository;
+import com.carnet.uach.services.RegistroAsistenciaService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,11 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
     // Aquí la inyectamos (gracias a @RequiredArgsConstructor) para poder publicar mensajes
     // hacia un exchange de RabbitMQ cuando se rechaza una evidencia.
     // ========================================================================================
+    // ========================================================================================
     private final RabbitTemplate rabbitTemplate;
+    
+    // Inyectamos el ProducerTemplate de Camel para enviar mensajes a nuestras rutas SEDA
+    private final ProducerTemplate producerTemplate;
     
     private final String UPLOAD_DIR = "../uploads/evidencias/";
 
@@ -74,6 +81,10 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
         registro.setEvidencia(filePath.toString()); // Se guarda la ruta física
 
         registroAsistenciaRepository.save(registro);
+        
+        // Simular notificación al encargado usando Apache Camel (SEDA)
+        producerTemplate.sendBody("seda:notificarEncargado", 
+            "El estudiante con matrícula " + matricula + " ha subido una evidencia para el evento ID: " + idEvento);
     }
 
     @Override
@@ -91,6 +102,10 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
         if (registro != null) {
             registro.setAsistenciaConfirmada(true);
             registroAsistenciaRepository.save(registro);
+            
+            // Simular notificación al estudiante de APROBACIÓN usando Apache Camel (SEDA)
+            producerTemplate.sendBody("seda:notificarEstudiante", 
+                "Tu evidencia para el evento ID: " + idEvento + " ha sido APROBADA.");
         }
     }
 
@@ -120,6 +135,10 @@ public class RegistroAsistenciaServiceImpl implements RegistroAsistenciaService 
             // 3. rutaEvidencia: El cuerpo (payload) del mensaje, que es la ruta física del archivo.
             // ========================================================================================
             rabbitTemplate.convertAndSend("evidencias.exchange", "evidencia.rechazada", rutaEvidencia);
+            
+            // Simular notificación al estudiante de RECHAZO usando Apache Camel (SEDA)
+            producerTemplate.sendBody("seda:notificarEstudiante", 
+                "Lo sentimos. Tu evidencia para el evento ID: " + idEvento + " ha sido RECHAZADA.");
         } else {
             // Se elimina el registro directamente
             registroAsistenciaRepository.deleteById(id);
